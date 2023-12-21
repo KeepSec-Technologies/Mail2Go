@@ -1,8 +1,8 @@
 <p align="center">
- <img src="https://github.com/KeepSec-Technologies/GoDom/assets/108779415/430a7dd3-be24-4f32-8c12-818bc2ad26bb"
+ <img src="https://github.com/KeepSec-Technologies/Mail2Go/assets/108779415/f28159ee-5300-45bd-9e53-76ca2bf2ca88"
 </p>
 
-# Mail2Go
+# Mail2Go - Lightweight CLI SMTP client
 
 Mail2Go is a very lightweight command-line SMTP client written in Go, designed to send emails from the command-line easily.
 
@@ -85,8 +85,8 @@ Flags:
  -p, --smtp-port           SMTP server port (Default: 587)
  -u, --smtp-username       Username for SMTP authentication
  -w, --smtp-password       Password for SMTP authentication
- -f, --from-email          Email address to send notifications from
- -t, --to-email            Email addresses to send notifications to, comma-separated
+ -f, --from-email          Email address to send from
+ -t, --to-email            Email addresses that will receive the email, comma-separated
  -h, --subject             Subject of the email
  -b, --body                Body of the email
  -af, --attachments        File paths for attachments, comma-separated
