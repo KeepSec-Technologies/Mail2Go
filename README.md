@@ -2,7 +2,7 @@
  <img src="https://github.com/KeepSec-Technologies/Mail2Go/assets/108779415/f28159ee-5300-45bd-9e53-76ca2bf2ca88"
 </p>
 
-# Mail2Go
+# Mail2Go - Lightweight CLI SMTP client
 
 Mail2Go is a very lightweight command-line SMTP client written in Go, designed to send emails from the command-line easily.
 
