@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://github.com/KeepSec-Technologies/GoDom/assets/108779415/430a7dd3-be24-4f32-8c12-818bc2ad26bb"
+ <img src="https://github.com/KeepSec-Technologies/Mail2Go/assets/108779415/f28159ee-5300-45bd-9e53-76ca2bf2ca88"
 </p>
 
 # Mail2Go
