@@ -85,8 +85,8 @@ Flags:
  -p, --smtp-port           SMTP server port (Default: 587)
  -u, --smtp-username       Username for SMTP authentication
  -w, --smtp-password       Password for SMTP authentication
- -f, --from-email          Email address to send notifications from
- -t, --to-email            Email addresses to send notifications to, comma-separated
+ -f, --from-email          Email address to send from
+ -t, --to-email            Email addresses that will receive the email, comma-separated
  -h, --subject             Subject of the email
  -b, --body                Body of the email
  -af, --attachments        File paths for attachments, comma-separated
