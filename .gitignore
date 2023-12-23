@@ -22,3 +22,6 @@ go.work
 
 mail2go
 *.tar.gz
+
+releases/
+build/

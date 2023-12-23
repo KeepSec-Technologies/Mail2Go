@@ -13,6 +13,7 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 - [Installation](#installation)
 - [Building from Source](#building-from-source)
 - [Usage](#usage)
+- [Examples](#examples)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -22,7 +23,7 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 - **Attachments Support**: Attach multiple files of various types to your emails.
 - **HTML and Plain Text**: Supports both HTML and plain text formats for email bodies.
 - **Command Line Interface**: Easy-to-use CLI arguments for configuring and sending emails.
-- **Flexible Configuration**: SMTP server, port, username, and password can be configured through CLI arguments.
+- **Flexible Configuration**: SMTP server, port, username, and password can be configured through CLI arguments or a JSON configuration file.
 
 ## Requirements
 
@@ -34,13 +35,13 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 1. Download the binary with wget:
 
     ```shell
-    wget https://github.com/KeepSec-Technologies/Mail2Go/releases/download/1.0/mail2go_linux_amd64_1.0.tar.gz
+    wget https://github.com/KeepSec-Technologies/Mail2Go/releases/download/1.1/mail2go_linux_amd64_1.1.tar.gz
     ```
 
 2. Unpack it with tar
 
     ```shell
-    tar -xf mail2go_linux_amd64_1.0.tar.gz
+    tar -xf mail2go_linux_amd64_1.1.tar.gz
     ```
 
 3. Move it to your /usr/local/bin/ (Optional):
@@ -72,13 +73,7 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 
 ## Usage
 
-Run the Mail2Go tool with the required flags:
-
-```shell
-./mail2go --smtp-server [SMTP_SERVER] --smtp-port [SMTP_PORT] --smtp-username [USERNAME] --smtp-password [PASSWORD] --from-email [FROM_EMAIL] --to-email [TO_EMAIL_1],[TO_EMAIL_2] --subject "Your Subject" --body "Your email body." --attachments "path/to/attachment1,path/to/attachment2"
-```
-
-Flags:
+Run the Mail2Go tool with the required arguments:
 
 ```text
  -s, --smtp-server         SMTP server for sending emails
@@ -86,12 +81,27 @@ Flags:
  -u, --smtp-username       Username for SMTP authentication
  -w, --smtp-password       Password for SMTP authentication
  -f, --from-email          Email address to send from
+ -c, --config              Path to the SMTP json config file which replaces the above arguments
  -t, --to-email            Email addresses that will receive the email, comma-separated
  -h, --subject             Subject of the email
  -b, --body                Body of the email
  -af, --attachments        File paths for attachments, comma-separated
  -bf, --body-file          File path for email body
 ```
+
+Those arguments would look like this in your CLI:
+
+```shell
+./mail2go --smtp-server [SMTP_SERVER] --smtp-port [SMTP_PORT] --smtp-username [USERNAME] --smtp-password [PASSWORD] --from-email [FROM_EMAIL] --to-email [TO_EMAIL_1],[TO_EMAIL_2] --subject "Your Subject" --body "Your email body." --attachments "path/to/attachment1,path/to/attachment2"
+```
+
+or
+
+```shell
+./mail2go --config "path/to/config.json" --to-email [TO_EMAIL_1],[TO_EMAIL_2] --subject "Your Subject" --body-file "path/to/email.html" --attachments "path/to/attachment1,path/to/attachment2"
+```
+
+## Examples
 
 Basic example:
 
@@ -103,6 +113,24 @@ Example with two recipients, the body from an HTML file and two attached files (
 
 ```shell
 ./mail2go -s mail.example.com -u user@example.com -w password123 -f mail2go@example.com -t admin@example.com,other@example.com -h 'Test Mail2Go Subject' -bf demo/body.html -af README.md,demo/mail2go-smaller.png
+```
+
+Example of json config file to pass to Mail2Go:
+
+```json
+{
+    "smtp_server": "mail.example.com",
+    "smtp_port": 587,
+    "smtp_username": "user@example.com",
+    "smtp_password": "password123",
+    "from_email": "mail2go@example.com"
+}
+```
+
+The command that goes with it:
+
+```shell
+./mail2go -c demo/config.json -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
 ```
 
 ## Contributing
