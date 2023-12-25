@@ -35,13 +35,13 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 1. Download the binary with wget:
 
     ```shell
-    wget https://github.com/KeepSec-Technologies/Mail2Go/releases/download/1.1/mail2go_linux_amd64_1.1.tar.gz
+    wget https://github.com/KeepSec-Technologies/Mail2Go/releases/download/1.1.2/mail2go_linux_amd64_1.1.2.tar.gz
     ```
 
 2. Unpack it with tar
 
     ```shell
-    tar -xf mail2go_linux_amd64_1.1.tar.gz
+    tar -xf mail2go_linux_amd64_1.1.2.tar.gz
     ```
 
 3. Move it to your /usr/local/bin/ (Optional):
