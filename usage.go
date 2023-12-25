@@ -13,7 +13,7 @@ func usage() {
 	fmt.Fprintln(os.Stderr, "  -u, --smtp-username       Username for SMTP authentication")
 	fmt.Fprintln(os.Stderr, "  -w, --smtp-password       Password for SMTP authentication")
 	fmt.Fprintln(os.Stderr, "  -f, --from-email          Email address to send from")
-	fmt.Fprintln(os.Stderr, "  -c, --config          	 Path to the SMTP json config file which replaces the above arguments")
+	fmt.Fprintln(os.Stderr, "  -c, --config              Path to the SMTP json config file which replaces the above arguments")
 	fmt.Fprintln(os.Stderr, "  -t, --to-email            Email addresses that will receive the email, comma-separated")
 	fmt.Fprintln(os.Stderr, "  -h, --subject             Subject of the email")
 	fmt.Fprintln(os.Stderr, "  -b, --body	            Body of the email")
