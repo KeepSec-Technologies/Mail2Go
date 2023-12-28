@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://github.com/KeepSec-Technologies/Mail2Go/assets/108779415/f28159ee-5300-45bd-9e53-76ca2bf2ca88"
+ <img src="https://github.com/KeepSec-Technologies/Mail2Go/assets/108779415/afb750ff-0320-46d5-8e03-e26dfbde1c49"
 </p>
 
 # Mail2Go - Lightweight CLI SMTP client
