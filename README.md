@@ -1,8 +1,11 @@
 <p align="center">
- <img src="https://github.com/KeepSec-Technologies/Mail2Go/assets/108779415/f28159ee-5300-45bd-9e53-76ca2bf2ca88"
+ <img src="https://github.com/KeepSec-Technologies/Mail2Go/assets/108779415/afb750ff-0320-46d5-8e03-e26dfbde1c49"
 </p>
 
 # Mail2Go - Lightweight CLI SMTP client
+![License](https://img.shields.io/github/license/KeepSec-Technologies/Mail2Go)
+![GitHub issues](https://img.shields.io/github/issues-raw/KeepSec-Technologies/Mail2Go)
+![GitHub go.mod Go version (branch & subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/KeepSec-Technologies/Mail2Go/main)
 
 Mail2Go is a very lightweight command-line SMTP client written in Go, designed to send emails from the command-line easily.
 
