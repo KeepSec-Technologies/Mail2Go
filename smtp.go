@@ -34,18 +34,34 @@ func sendEmail(smtpServer string, smtpPort int, username string, password string
 		m.AttachFile(attachment)
 	}
 
-	// Create a new client
-	c, err := mail.NewClient(smtpServer, mail.WithPort(smtpPort), mail.WithSMTPAuth(mail.SMTPAuthPlain),
-		mail.WithUsername(username), mail.WithPassword(password))
-	if err != nil {
-		return err
-	}
-	defer c.Close()
+	// Add SSL option if port is 465
+	if smtpPort == 465 {
+		// Create a new client
+		c, err := mail.NewClient(smtpServer, mail.WithPort(smtpPort), mail.WithSMTPAuth(mail.SMTPAuthPlain), mail.WithUsername(username), mail.WithPassword(password), mail.WithSSL())
+		if err != nil {
+			return err
+		}
+		defer c.Close()
 
-	// Send the email
-	if err := c.DialAndSend(m); err != nil {
-		fmt.Printf("Error sending email: %v", err)
-		return err
+		// Send the email
+		if err := c.DialAndSend(m); err != nil {
+			fmt.Printf("Error sending email: %v", err)
+			return err
+		}
+
+	} else {
+		// Create a new client
+		c, err := mail.NewClient(smtpServer, mail.WithPort(smtpPort), mail.WithSMTPAuth(mail.SMTPAuthPlain), mail.WithUsername(username), mail.WithPassword(password))
+		if err != nil {
+			return err
+		}
+		defer c.Close()
+
+		// Send the email
+		if err := c.DialAndSend(m); err != nil {
+			fmt.Printf("Error sending email: %v", err)
+			return err
+		}
 	}
 
 	fmt.Printf("\nEmail sent successfully to %s from %s\n", strings.Join(to, ", "), from)
