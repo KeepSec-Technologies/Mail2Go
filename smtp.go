@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"strings"
 
@@ -8,7 +9,7 @@ import (
 )
 
 // sendEmail constructs and sends an email with the specified HTML body and attachments.
-func sendEmail(smtpServer string, smtpPort int, username string, password string, from string, to []string, subject, body, bodyFile string, attachments []string) error {
+func sendEmail(smtpServer string, smtpPort int, username string, password string, from string, to []string, subject, body, bodyFile string, attachments []string, tlsMode string) error {
 	// Create a new message
 	m := mail.NewMsg()
 	if err := m.From(from); err != nil {
@@ -34,34 +35,46 @@ func sendEmail(smtpServer string, smtpPort int, username string, password string
 		m.AttachFile(attachment)
 	}
 
-	// Add SSL option if port is 465
-	if smtpPort == 465 {
-		// Create a new client
-		c, err := mail.NewClient(smtpServer, mail.WithPort(smtpPort), mail.WithSMTPAuth(mail.SMTPAuthPlain), mail.WithUsername(username), mail.WithPassword(password), mail.WithSSL())
-		if err != nil {
-			return err
-		}
-		defer c.Close()
+	clientOptions := []mail.Option{
+		mail.WithPort(smtpPort),
+	}
 
-		// Send the email
-		if err := c.DialAndSend(m); err != nil {
-			fmt.Printf("Error sending email: %v", err)
-			return err
-		}
+	// Define client options
+	if username != "" || password != "" {
+		clientOptions = append(
+			clientOptions,
+			mail.WithSMTPAuth(mail.SMTPAuthPlain),
+			mail.WithUsername(username),
+			mail.WithPassword(password),
+		)
+	}
 
-	} else {
-		// Create a new client
-		c, err := mail.NewClient(smtpServer, mail.WithPort(smtpPort), mail.WithSMTPAuth(mail.SMTPAuthPlain), mail.WithUsername(username), mail.WithPassword(password))
-		if err != nil {
-			return err
+	// Conditionally add TLS options based on tlsMode
+	switch tlsMode {
+	case "none":
+		clientOptions = append(clientOptions, mail.WithTLSPolicy(mail.NoTLS))
+	case "tls-skip":
+		tlsSkipConfig := &tls.Config{
+			InsecureSkipVerify: true,
+			ServerName:         smtpServer,
 		}
-		defer c.Close()
+		clientOptions = append(clientOptions, mail.WithTLSConfig(tlsSkipConfig))
+	case "tls":
+		clientOptions = append(clientOptions, mail.WithTLSPolicy(mail.TLSMandatory))
+	}
+	// Create a new client using the options
+	c, err := mail.NewClient(smtpServer, clientOptions...)
+	if err != nil {
+		fmt.Printf("Failed to create SMTP client: %v", err)
+	}
+	if c == nil {
+		fmt.Printf("SMTP client is nil")
+	}
 
-		// Send the email
-		if err := c.DialAndSend(m); err != nil {
-			fmt.Printf("Error sending email: %v", err)
-			return err
-		}
+	// Send the email
+	if err := c.DialAndSend(m); err != nil {
+		fmt.Printf("Error sending email: %v", err)
+		return err
 	}
 
 	fmt.Printf("\nEmail sent successfully to %s from %s\n", strings.Join(to, ", "), from)

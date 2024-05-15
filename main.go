@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 )
@@ -14,6 +13,8 @@ var (
 	smtpPort   int
 	username   string
 	password   string
+
+	tlsMode string
 
 	configFile string
 
@@ -31,6 +32,8 @@ var (
 	smtpPortShort   int
 	usernameShort   string
 	passwordShort   string
+
+	tlsModeShort string
 
 	configFileShort string
 
@@ -51,6 +54,8 @@ func init() {
 	flag.StringVar(&username, "smtp-username", "", "Username for SMTP authentication")
 	flag.StringVar(&password, "smtp-password", "", "Password for SMTP authentication")
 
+	flag.StringVar(&tlsMode, "tls-mode", "", "TLS mode (none, tls-skip, tls)")
+
 	flag.StringVar(&configFile, "config", "", "Path to the SMTP config file")
 
 	flag.StringVar(&fromEmail, "from-email", "", "Email address to send from")
@@ -68,6 +73,8 @@ func init() {
 	flag.StringVar(&usernameShort, "u", "", "Username for SMTP authentication (short)")
 	flag.StringVar(&passwordShort, "w", "", "Password for SMTP authentication (short)")
 
+	flag.StringVar(&tlsModeShort, "l", "", "TLS mode (short)")
+
 	flag.StringVar(&configFileShort, "c", "", "Path to the SMTP config file (short)")
 
 	flag.StringVar(&fromEmailShort, "f", "", "Email address to send from (short)")
@@ -81,6 +88,8 @@ func init() {
 }
 
 func main() {
+	// Override the default flag.Usage
+	flag.Usage = Usage
 	flag.Parse()
 
 	// Override long-form flags with short-form flags if set
@@ -95,6 +104,9 @@ func main() {
 	}
 	if passwordShort != "" {
 		password = passwordShort
+	}
+	if tlsModeShort != "" {
+		tlsMode = tlsModeShort
 	}
 	if configFileShort != "" {
 		configFile = configFileShort
@@ -122,7 +134,7 @@ func main() {
 	if configFile != "" {
 		config, err := loadConfig(configFile)
 		if err != nil {
-			log.Fatalf("Error loading config file: %v", err)
+			fmt.Printf("Error loading config file: %v", err)
 		}
 
 		// Override flags with config file values if set
@@ -138,28 +150,31 @@ func main() {
 		if config.SMTPPassword != "" {
 			password = config.SMTPPassword
 		}
+		if config.TLSMode != "" {
+			tlsMode = config.TLSMode
+		}
 		if config.FromEmail != "" {
 			fromEmail = config.FromEmail
 		}
 	}
 
 	// Check if required flags or config values are missing
-	if smtpServer == "" || username == "" || password == "" || fromEmail == "" || toEmail == "" || subject == "" {
+	if smtpServer == "" || tlsMode == "" || fromEmail == "" || toEmail == "" || subject == "" {
 		fmt.Fprintln(os.Stderr, "Error: Required flags or config values are missing.")
-		usage()
+		Usage()
 	}
 
 	// Check if either direct input or file path is provided for body
 	if body == "" && bodyFile == "" {
 		fmt.Fprintln(os.Stderr, "Error: Subject and body are required, either directly or through a specified file.")
-		usage()
+		Usage()
 	}
 
 	// Read body from files if provided
 	if bodyFile != "" {
 		content, err := os.ReadFile(bodyFile)
 		if err != nil {
-			log.Fatalf("\nError reading body file: %v\n", err)
+			fmt.Printf("\nError reading body file: %v\n", err)
 		}
 		body = string(content)
 	}
@@ -178,8 +193,8 @@ func main() {
 
 	if len(toEmails) == 0 {
 		fmt.Fprintln(os.Stderr, "Error: At least one recipient email address is required.")
-		usage()
+		Usage()
 	}
 
-	sendEmail(smtpServer, smtpPort, username, password, fromEmail, toEmails, subject, body, bodyFile, attachmentPaths)
+	sendEmail(smtpServer, smtpPort, username, password, fromEmail, toEmails, subject, body, bodyFile, attachmentPaths, tlsMode)
 }
