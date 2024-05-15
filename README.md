@@ -92,7 +92,7 @@ Run the Mail2Go tool with the required arguments:
 -t, --to-email            Email addresses that will receive the email, can be multiples (comma-separated)
 -h, --subject             Subject of the email
 -b, --body                Body of the email
--af, --attachments        File paths for attachments, comma-separated
+-af, --attachments        File paths for attachments, can be multiples (comma-separated)
 -bf, --body-file          File path for email body
 ```
 
