@@ -100,16 +100,16 @@ Run the Mail2Go tool with the required arguments:
 
 ```shell
 # Basic example:
-./mail2go -s mail.example.com -p 587 -u user@example.com -w password123 -l tls -f mail2go@example.com -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
+mail2go -s mail.example.com -p 587 -u user@example.com -w password123 -l tls -f mail2go@example.com -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
 
 # Example with two recipients, the body from an HTML file and two attached files (can be more):
-./mail2go -s mail.example.com -p 587  -u user@example.com -w password123 -l tls -f mail2go@example.com -t admin@example.com,other@example.com -h 'Test Mail2Go Subject' -bf demo/body.html -af README.md,demo/mail2go-smaller.png
+mail2go -s mail.example.com -p 587  -u user@example.com -w password123 -l tls -f mail2go@example.com -t admin@example.com,other@example.com -h 'Test Mail2Go Subject' -bf demo/body.html -af README.md,demo/mail2go-smaller.png
 
 # Example without authentication and no TLS:
-./mail2go -s mail.example.com -p 25 -l none -f mail2go@example.com -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
+mail2go -s mail.example.com -p 25 -l none -f mail2go@example.com -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
 
 # Example of a local SMTP server with a TLS certificate that can't be verified:
-./mail2go -s localhost -p 587 -u user@example.com -w password123 -l tls-skip -f mail2go@example.com -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
+mail2go -s localhost -p 587 -u user@example.com -w password123 -l tls-skip -f mail2go@example.com -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
 ```
 
 Example of json configuration file to pass to Mail2Go:
@@ -128,7 +128,7 @@ Example of json configuration file to pass to Mail2Go:
 Example of the command that goes with it:
 
 ```shell
-./mail2go -c demo/config.json -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
+mail2go -c demo/config.json -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
 ```
 
 ## Contributing
