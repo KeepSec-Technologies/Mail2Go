@@ -43,7 +43,7 @@ func sendEmail(smtpServer string, smtpPort int, username string, password string
 	if username != "" || password != "" {
 		clientOptions = append(
 			clientOptions,
-			mail.WithSMTPAuth(mail.SMTPAuthPlain),
+			mail.WithSMTPAuth(mail.SMTPAuthLogin),
 			mail.WithUsername(username),
 			mail.WithPassword(password),
 		)
