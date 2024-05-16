@@ -72,7 +72,7 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 4. Build the tool:
 
     ```shell
-    go build -o mail2go .
+    CGO_ENABLED=0 go build -a -installsuffix cgo -o mail2go .
     ```
 
 ## Usage
