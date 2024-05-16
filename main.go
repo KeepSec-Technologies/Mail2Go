@@ -54,7 +54,7 @@ func init() {
 	flag.StringVar(&username, "smtp-username", "", "Username for SMTP authentication")
 	flag.StringVar(&password, "smtp-password", "", "Password for SMTP authentication")
 
-	flag.StringVar(&tlsMode, "tls-mode", "", "TLS mode (none, tls-skip, tls)")
+	flag.StringVar(&tlsMode, "tls-mode", "tls", "TLS mode (none, tls-skip, tls)")
 
 	flag.StringVar(&configFile, "config", "", "Path to the SMTP config file")
 
@@ -73,7 +73,7 @@ func init() {
 	flag.StringVar(&usernameShort, "u", "", "Username for SMTP authentication (short)")
 	flag.StringVar(&passwordShort, "w", "", "Password for SMTP authentication (short)")
 
-	flag.StringVar(&tlsModeShort, "l", "", "TLS mode (short)")
+	flag.StringVar(&tlsModeShort, "l", "tls", "TLS mode (short)")
 
 	flag.StringVar(&configFileShort, "c", "", "Path to the SMTP config file (short)")
 
@@ -159,7 +159,7 @@ func main() {
 	}
 
 	// Check if required flags or config values are missing
-	if smtpServer == "" || tlsMode == "" || fromEmail == "" || toEmail == "" || subject == "" {
+	if smtpServer == "" || fromEmail == "" || toEmail == "" || subject == "" {
 		fmt.Fprintln(os.Stderr, "Error: Required flags or config values are missing.")
 		Usage()
 	}
