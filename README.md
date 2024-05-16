@@ -31,7 +31,7 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 
 ## Requirements
 
-- Go 1.20 or higher recommended (for build).
+- Go 1.22 or higher recommended (for build).
 - Access to an SMTP server for sending emails.
 
 ## Installation
