@@ -89,7 +89,14 @@ func init() {
 }
 
 func main() {
-	// Load config file first, so that any additional flags will take priority
+	// Override the default flag.Usage
+	flag.Usage = Usage
+	flag.Parse()
+
+	var config Config = Config{}
+
+	// Load config file
+	configFile = priorityString([]string{configFile, configFileShort})
 	if configFile == "" {
 		// config file not provided -- look for default file
 		if path, err := os.UserConfigDir(); err == nil {
@@ -100,73 +107,26 @@ func main() {
 		}
 	}
 	if configFile != "" {
-		config, err := loadConfig(configFile)
+		c, err := loadConfig(configFile)
 		if err != nil {
 			fmt.Printf("Error loading config file: %v", err)
 		}
-
-		// Override flags with config file values if set
-		if config.SMTPServer != "" {
-			smtpServer = config.SMTPServer
-		}
-		if config.SMTPPort != 0 {
-			smtpPort = config.SMTPPort
-		}
-		if config.SMTPUsername != "" {
-			username = config.SMTPUsername
-		}
-		if config.SMTPPassword != "" {
-			password = config.SMTPPassword
-		}
-		if config.TLSMode != "" {
-			tlsMode = config.TLSMode
-		}
-		if config.FromEmail != "" {
-			fromEmail = config.FromEmail
-		}
+		config = c
 	}
 
-	// Override the default flag.Usage
-	flag.Usage = Usage
-	flag.Parse()
+	// Clearly define our config priorities, lowest to highest: config files, long flags, short flags
+	smtpServer = priorityString([]string{config.SMTPServer, smtpServer, smtpServerShort})
+	smtpPort = priorityInt(587, []int{config.SMTPPort, smtpPort, smtpPortShort})
+	username = priorityString([]string{config.SMTPUsername, username, usernameShort})
+	password = priorityString([]string{config.SMTPPassword, password, passwordShort})
+	tlsMode = priorityString([]string{config.TLSMode, tlsMode, tlsModeShort})
+	fromEmail = priorityString([]string{config.FromEmail, fromEmail, fromEmailShort})
 
-	// Override long-form flags with short-form flags if set
-	if smtpServerShort != "" {
-		smtpServer = smtpServerShort
-	}
-	if smtpPortShort != 587 {
-		smtpPort = smtpPortShort
-	}
-	if usernameShort != "" {
-		username = usernameShort
-	}
-	if passwordShort != "" {
-		password = passwordShort
-	}
-	if tlsModeShort != "" {
-		tlsMode = tlsModeShort
-	}
-	if configFileShort != "" {
-		configFile = configFileShort
-	}
-	if fromEmailShort != "" {
-		fromEmail = fromEmailShort
-	}
-	if toEmailShort != "" {
-		toEmail = toEmailShort
-	}
-	if subjectShort != "" {
-		subject = subjectShort
-	}
-	if bodyShort != "" {
-		body = bodyShort
-	}
-	if attachmentsFilesShort != "" {
-		attachmentsFiles = attachmentsFilesShort
-	}
-	if bodyFileShort != "" {
-		bodyFile = bodyFileShort
-	}
+	toEmail = priorityString([]string{toEmail, toEmailShort})
+	subject = priorityString([]string{subject, subjectShort})
+	body = priorityString([]string{body, bodyShort})
+	attachmentsFiles = priorityString([]string{attachmentsFiles, attachmentsFilesShort})
+	bodyFile = priorityString([]string{bodyFile, bodyFileShort})
 
 	// Check if required flags or config values are missing
 	if smtpServer == "" || fromEmail == "" || toEmail == "" || subject == "" {
@@ -186,7 +146,7 @@ func main() {
 		if err != nil {
 			fmt.Printf("\nError reading body file: %v\n", err)
 		}
-		body = string(content)
+		body = priorityString([]string{string(content), body}) //preserve the "flags override files" semantic
 	}
 
 	// Split attachment file paths
@@ -207,4 +167,24 @@ func main() {
 	}
 
 	sendEmail(smtpServer, smtpPort, username, password, fromEmail, toEmails, subject, body, bodyFile, attachmentPaths, tlsMode)
+}
+
+func priorityString(strings []string) string {
+	var result = ""
+	for _, val := range strings {
+		if val != "" {
+			result = val
+		}
+	}
+	return result
+}
+
+func priorityInt(emptyval int, ints []int) int {
+	var result = emptyval
+	for _, val := range ints {
+		if val != emptyval {
+			result = val
+		}
+	}
+	return result
 }
