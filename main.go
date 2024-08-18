@@ -93,7 +93,7 @@ func main() {
 	if configFile == "" {
 		// config file not provided -- look for default file
 		if path, err := os.UserConfigDir(); err == nil {
-			path = filepath.Join(path, "mail2go", "mail2go.conf")
+			path = filepath.Join(path, "mail2go", "config.json")
 			if _, err := os.Stat(path); err == nil {
 				configFile = path
 			}
