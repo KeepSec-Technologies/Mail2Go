@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -88,6 +89,43 @@ func init() {
 }
 
 func main() {
+	// Load config file first, so that any additional flags will take priority
+	if configFile == "" {
+		// config file not provided -- look for default file
+		if path, err := os.UserConfigDir(); err == nil {
+			path = filepath.Join(path, "mail2go", "mail2go.conf")
+			if _, err := os.Stat(path); err == nil {
+				configFile = path
+			}
+		}
+	}
+	if configFile != "" {
+		config, err := loadConfig(configFile)
+		if err != nil {
+			fmt.Printf("Error loading config file: %v", err)
+		}
+
+		// Override flags with config file values if set
+		if config.SMTPServer != "" {
+			smtpServer = config.SMTPServer
+		}
+		if config.SMTPPort != 0 {
+			smtpPort = config.SMTPPort
+		}
+		if config.SMTPUsername != "" {
+			username = config.SMTPUsername
+		}
+		if config.SMTPPassword != "" {
+			password = config.SMTPPassword
+		}
+		if config.TLSMode != "" {
+			tlsMode = config.TLSMode
+		}
+		if config.FromEmail != "" {
+			fromEmail = config.FromEmail
+		}
+	}
+
 	// Override the default flag.Usage
 	flag.Usage = Usage
 	flag.Parse()
@@ -128,34 +166,6 @@ func main() {
 	}
 	if bodyFileShort != "" {
 		bodyFile = bodyFileShort
-	}
-
-	// Load config from file if provided
-	if configFile != "" {
-		config, err := loadConfig(configFile)
-		if err != nil {
-			fmt.Printf("Error loading config file: %v", err)
-		}
-
-		// Override flags with config file values if set
-		if config.SMTPServer != "" {
-			smtpServer = config.SMTPServer
-		}
-		if config.SMTPPort != 0 {
-			smtpPort = config.SMTPPort
-		}
-		if config.SMTPUsername != "" {
-			username = config.SMTPUsername
-		}
-		if config.SMTPPassword != "" {
-			password = config.SMTPPassword
-		}
-		if config.TLSMode != "" {
-			tlsMode = config.TLSMode
-		}
-		if config.FromEmail != "" {
-			fromEmail = config.FromEmail
-		}
 	}
 
 	// Check if required flags or config values are missing
