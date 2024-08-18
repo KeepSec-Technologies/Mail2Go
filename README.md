@@ -132,6 +132,12 @@ Example of the command that goes with it:
 mail2go -c demo/config.json -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
 ```
 
+If you are using the default configuration file at `~/.config/mail2go/config.json` it would look like this:
+
+```shell
+mail2go -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
+```
+
 **Note:** Any configuration file (from the `--config` argument or the default location at `~/.config/mail2go/config.json`) will override CLI arguments.
 
 ## Contributing
