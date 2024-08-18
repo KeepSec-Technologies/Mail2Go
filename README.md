@@ -138,7 +138,7 @@ If you are using the default configuration file at `~/.config/mail2go/config.jso
 mail2go -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
 ```
 
-**Note:** Any configuration file (from the `--config` argument or the default location at `~/.config/mail2go/config.json`) will override CLI arguments.
+**Note:** CLI arguments will override configuration files (from the `--config` argument or the default location at `~/.config/mail2go/config.json`).
 
 ## Contributing
 
