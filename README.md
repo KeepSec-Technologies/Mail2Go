@@ -28,6 +28,7 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 - **HTML and Plain Text**: Supports both HTML and plain text formats for email bodies.
 - **Command Line Interface**: Easy-to-use CLI arguments for configuring and sending emails.
 - **Flexible Configuration**: SMTP server, TLS, port, username, and password can be configured through CLI arguments or a JSON configuration file.
+- **Automatic Configuration File Detection**: Will automatically search for a default configuration file in the user's config directory if no configuration file is provided (e.g., `~/.config/mail2go/config.json`).
 
 ## Requirements
 
@@ -130,6 +131,8 @@ Example of the command that goes with it:
 ```shell
 mail2go -c demo/config.json -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 
 ```
+
+**Note:** Any configuration file (from the `--config` argument or the default location at `~/.config/mail2go/config.json`) will override CLI arguments.
 
 ## Contributing
 
