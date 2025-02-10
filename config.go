@@ -11,6 +11,7 @@ type Config struct {
 	SMTPPort     int    `json:"smtp_port"`
 	SMTPUsername string `json:"smtp_username"`
 	SMTPPassword string `json:"smtp_password"`
+	NoAuth       bool   `json:"no_auth"`
 	TLSMode      string `json:"tls_mode"`
 	FromEmail    string `json:"from_email"`
 }

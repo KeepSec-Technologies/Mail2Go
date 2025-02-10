@@ -12,6 +12,7 @@ func Usage() {
 	fmt.Fprintln(os.Stderr, "  -p, --smtp-port           SMTP server port (Default: 587)")
 	fmt.Fprintln(os.Stderr, "  -u, --smtp-username       Username for SMTP authentication")
 	fmt.Fprintln(os.Stderr, "  -w, --smtp-password       Password for SMTP authentication")
+	fmt.Fprintln(os.Stderr, "  --no-auth, -na           Use unauthenticated SMTP")
 	fmt.Fprintln(os.Stderr, "  -l, --tls-mode            TLS mode (none, tls-skip, tls)")
 	fmt.Fprintln(os.Stderr, "  -f, --from-email          Email address to send from")
 	fmt.Fprintln(os.Stderr, "")

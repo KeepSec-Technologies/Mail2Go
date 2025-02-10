@@ -9,7 +9,7 @@ import (
 )
 
 // sendEmail constructs and sends an email with the specified HTML body and attachments.
-func sendEmail(smtpServer string, smtpPort int, username string, password string, from string, to []string, subject, body, bodyFile string, attachments []string, tlsMode string) error {
+func sendEmail(smtpServer string, smtpPort int, username string, password string, from string, to []string, subject, body, bodyFile string, attachments []string, tlsMode string, noAuth bool) error {
 	// Create a new message
 	m := mail.NewMsg()
 	if err := m.From(from); err != nil {
@@ -40,7 +40,7 @@ func sendEmail(smtpServer string, smtpPort int, username string, password string
 	}
 
 	// Define client options
-	if username != "" || password != "" {
+	if !noAuth && (username != "" || password != "") {
 		clientOptions = append(
 			clientOptions,
 			mail.WithSMTPAuth(mail.SMTPAuthLogin),

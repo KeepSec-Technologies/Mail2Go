@@ -34,6 +34,9 @@ var (
 	usernameShort   string
 	passwordShort   string
 
+	noAuth            bool
+    noAuthShort      bool
+
 	tlsModeShort string
 
 	configFileShort string
@@ -54,6 +57,7 @@ func init() {
 	flag.IntVar(&smtpPort, "smtp-port", 587, "SMTP server port")
 	flag.StringVar(&username, "smtp-username", "", "Username for SMTP authentication")
 	flag.StringVar(&password, "smtp-password", "", "Password for SMTP authentication")
+	flag.BoolVar(&noAuth, "no-auth", false, "Use unauthenticated SMTP")
 
 	flag.StringVar(&tlsMode, "tls-mode", "tls", "TLS mode (none, tls-skip, tls)")
 
@@ -73,6 +77,7 @@ func init() {
 	flag.IntVar(&smtpPortShort, "p", 587, "SMTP server port (short)")
 	flag.StringVar(&usernameShort, "u", "", "Username for SMTP authentication (short)")
 	flag.StringVar(&passwordShort, "w", "", "Password for SMTP authentication (short)")
+	flag.BoolVar(&noAuthShort, "na", false, "Use unauthenticated SMTP (short)")
 
 	flag.StringVar(&tlsModeShort, "l", "tls", "TLS mode (short)")
 
@@ -119,6 +124,7 @@ func main() {
 	smtpPort = priorityInt(587, []int{config.SMTPPort, smtpPort, smtpPortShort})
 	username = priorityString([]string{config.SMTPUsername, username, usernameShort})
 	password = priorityString([]string{config.SMTPPassword, password, passwordShort})
+	noAuth = noAuth || noAuthShort || config.NoAuth
 	tlsMode = priorityString([]string{config.TLSMode, tlsMode, tlsModeShort})
 	fromEmail = priorityString([]string{config.FromEmail, fromEmail, fromEmailShort})
 
@@ -166,7 +172,7 @@ func main() {
 		Usage()
 	}
 
-	sendEmail(smtpServer, smtpPort, username, password, fromEmail, toEmails, subject, body, bodyFile, attachmentPaths, tlsMode)
+	sendEmail(smtpServer, smtpPort, username, password, fromEmail, toEmails, subject, body, bodyFile, attachmentPaths, tlsMode, noAuth)
 }
 
 func priorityString(strings []string) string {
