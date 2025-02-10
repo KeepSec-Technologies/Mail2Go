@@ -85,6 +85,7 @@ Run the Mail2Go tool with the required arguments:
 -p, --smtp-port           SMTP server port (Default: 587)
 -u, --smtp-username       Username for SMTP authentication
 -w, --smtp-password       Password for SMTP authentication
+-na, --no-auth            No authentication required
 -l, --tls-mode            TLS mode (none, tls-skip, tls)
 -f, --from-email          Email address to send from
 
