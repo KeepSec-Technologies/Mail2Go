@@ -37,16 +37,16 @@ Mail2Go is a very lightweight command-line SMTP client written in Go, designed t
 
 ## Installation
 
-1. Download the Linux amd64 binary with wget (more versions on [release](https://github.com/KeepSec-Technologies/Mail2Go/releases/tag/1.1.7) tab):
+1. Download the Linux amd64 binary with wget (more versions on [release](https://github.com/KeepSec-Technologies/Mail2Go/releases/tag/1.1.8) tab):
 
     ```shell
-    wget https://github.com/KeepSec-Technologies/Mail2Go/releases/download/1.1.7/mail2go_linux_amd64_1.1.7.tar.gz
+    wget https://github.com/KeepSec-Technologies/Mail2Go/releases/download/1.1.8/mail2go_linux_amd64_1.1.8.tar.gz
     ```
 
 2. Unpack it with tar
 
     ```shell
-    tar -xf mail2go_linux_amd64_1.1.7.tar.gz
+    tar -xf mail2go_linux_amd64_1.1.8.tar.gz
     ```
 
 3. Move it to your /usr/local/bin/ (Optional):
@@ -91,11 +91,13 @@ Run the Mail2Go tool with the required arguments:
 
 -c, --config              Path to the SMTP json config file which replaces the above arguments
 
--t, --to-email            Email addresses that will receive the email, can be multiples (comma-separated)
+-t, --to-email            Email addresses that will receive the email, comma-separated
+-r, --reply-to            Email address to reply to (optional)
 -h, --subject             Subject of the email
 -b, --body                Body of the email
--af, --attachments        File paths for attachments, can be multiples (comma-separated)
--bf, --body-file          File path for email body
+-af, --attachments        File paths for attachments, comma-separated (optional)
+-bf, --body-file          File path for HTML email body (replaces the --body argument)
+-v, --version             Application version
 ```
 
 ## Examples
@@ -106,6 +108,9 @@ mail2go -s mail.example.com -p 587 -u user@example.com -w password123 -l tls -f 
 
 # Example with two recipients, the body from an HTML file and two attached files (can be more):
 mail2go -s mail.example.com -p 587  -u user@example.com -w password123 -l tls -f mail2go@example.com -t admin@example.com,other@example.com -h 'Test Mail2Go Subject' -bf demo/body.html -af README.md,demo/mail2go-smaller.png
+
+# Example with a reply-to address:
+mail2go -s mail.example.com -p 587 -u user@example.com -w password123 -l tls -f mail2go@example.com -t admin@example.com -r replytome@example.com -h 'Test Mail2Go Subject' -b 'This is a body!'
 
 # Example without authentication and no TLS:
 mail2go -s mail.example.com -p 25 -l none -f mail2go@example.com -t admin@example.com -h 'Test Mail2Go Subject' -b 'This is a body!' 

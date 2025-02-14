@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+var version = "1.1.8"
+
 var (
 	// Long-form flags
 	smtpServer string
@@ -21,6 +23,7 @@ var (
 
 	fromEmail string
 	toEmail   string
+	replyTo string
 
 	subject string
 	body    string
@@ -28,14 +31,16 @@ var (
 	attachmentsFiles string
 	bodyFile         string
 
+	showVersion bool
+
 	// Short-form flags
 	smtpServerShort string
 	smtpPortShort   int
 	usernameShort   string
 	passwordShort   string
 
-	noAuth            bool
-    noAuthShort      bool
+	noAuth      bool
+	noAuthShort bool
 
 	tlsModeShort string
 
@@ -43,12 +48,15 @@ var (
 
 	fromEmailShort string
 	toEmailShort   string
+	replyToShort string
 
 	subjectShort string
 	bodyShort    string
 
 	attachmentsFilesShort string
 	bodyFileShort         string
+
+	showVersionShort bool
 )
 
 func init() {
@@ -65,12 +73,15 @@ func init() {
 
 	flag.StringVar(&fromEmail, "from-email", "", "Email address to send from")
 	flag.StringVar(&toEmail, "to-email", "", "Email addresses that will receive the email, comma-separated")
+	flag.StringVar(&replyTo, "reply-to", "", "Email address to reply to")
 
 	flag.StringVar(&subject, "subject", "", "Subject of the email")
 	flag.StringVar(&body, "body", "", "Body of the email")
 
 	flag.StringVar(&attachmentsFiles, "attachments", "", "File paths for attachments, comma-separated")
 	flag.StringVar(&bodyFile, "body-file", "", "File path for email body")
+
+	flag.BoolVar(&showVersion, "version", false, "Display application version")
 
 	// Short-form flags
 	flag.StringVar(&smtpServerShort, "s", "", "SMTP server for sending emails (short)")
@@ -85,18 +96,27 @@ func init() {
 
 	flag.StringVar(&fromEmailShort, "f", "", "Email address to send from (short)")
 	flag.StringVar(&toEmailShort, "t", "", "Email addresses that will receive the email, comma-separated (short)")
+	flag.StringVar(&replyToShort, "r", "", "Email address to reply to (short)")
 
 	flag.StringVar(&subjectShort, "h", "", "Subject of the email (short)")
 	flag.StringVar(&bodyShort, "b", "", "Body of the email (short)")
 
 	flag.StringVar(&attachmentsFilesShort, "af", "", "File paths for attachments, comma-separated (short)")
 	flag.StringVar(&bodyFileShort, "bf", "", "File path for email body (short)")
+
+	flag.BoolVar(&showVersionShort, "v", false, "Display application version")
 }
 
 func main() {
 	// Override the default flag.Usage
 	flag.Usage = Usage
 	flag.Parse()
+
+	showVersion = showVersion || showVersionShort
+	if showVersion {
+		fmt.Printf("Mail2Go Version: %s\n", version)
+		os.Exit(0)
+	}
 
 	var config Config = Config{}
 
@@ -124,11 +144,12 @@ func main() {
 	smtpPort = priorityInt(587, []int{config.SMTPPort, smtpPort, smtpPortShort})
 	username = priorityString([]string{config.SMTPUsername, username, usernameShort})
 	password = priorityString([]string{config.SMTPPassword, password, passwordShort})
-	noAuth = noAuth || noAuthShort || config.NoAuth
+	noAuth = config.NoAuth || noAuth || noAuthShort
 	tlsMode = priorityString([]string{config.TLSMode, tlsMode, tlsModeShort})
 	fromEmail = priorityString([]string{config.FromEmail, fromEmail, fromEmailShort})
 
 	toEmail = priorityString([]string{toEmail, toEmailShort})
+	replyTo = priorityString([]string{replyTo, replyToShort})
 	subject = priorityString([]string{subject, subjectShort})
 	body = priorityString([]string{body, bodyShort})
 	attachmentsFiles = priorityString([]string{attachmentsFiles, attachmentsFilesShort})
@@ -172,7 +193,7 @@ func main() {
 		Usage()
 	}
 
-	sendEmail(smtpServer, smtpPort, username, password, fromEmail, toEmails, subject, body, bodyFile, attachmentPaths, tlsMode, noAuth)
+	sendEmail(smtpServer, smtpPort, username, password, fromEmail, toEmails, replyTo, subject, body, bodyFile, attachmentPaths, tlsMode, noAuth)
 }
 
 func priorityString(strings []string) string {
