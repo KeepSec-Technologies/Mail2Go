@@ -127,6 +127,7 @@ Example of json configuration file to pass to Mail2Go:
     "smtp_port": 587,
     "smtp_username": "user@example.com",
     "smtp_password": "password_example",
+    "no_auth": false,
     "tls_mode": "tls",
     "from_email": "mail2go@example.com"
 }
